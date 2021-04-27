@@ -22,7 +22,7 @@ public class HardcoreScoreboardManager {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         // Get stats
-        Score score =
+
     }
 
     public void updatePlayer(Player p, Integer time)

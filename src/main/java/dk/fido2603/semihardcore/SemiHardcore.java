@@ -164,39 +164,8 @@ public class SemiHardcore extends JavaPlugin
 
 		loadSettings();
 		saveSettings();
-		
-		if (this.uhcDayEnabled) {
-			logDebug("UHC Day is enabled... checking");
-			logDebug("Current day of week: " + TimeConverter.getDayOfWeek() + ". UHC Day: " + uhcDay);
-			
-			// now let's check every half minute, if it's UHC day
-			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
-			{
-				public void run()
-				{
-					if (TimeConverter.getDayOfWeek() == uhcDay && !isUHCDay) {
-						log("It's time for UHC day, switching the gamerule");
-						logDebug("Day: " + TimeConverter.getDayOfWeek() + " - UHCDay: " + plugin.uhcDay.toString());
-						getServer().dispatchCommand(console, "gamerule naturalRegeneration false");
-						isUHCDay = true;
-						sendInfoAll(plugin.messageStartUHCDay);
-						if (plugin.playSoundEnabled) {
-							plugin.playSoundAll(plugin.uhcStartSound);
-						}
-					}
-					else if (!(TimeConverter.getDayOfWeek() == uhcDay) && isUHCDay) {
-						log("It's not UHC day anymore, switching the gamerule...");
-						logDebug("Day: " + TimeConverter.getDayOfWeek() + " - UHCDay: " + plugin.uhcDay.toString());
-						getServer().dispatchCommand(console, "gamerule naturalRegeneration true");
-						isUHCDay = false;
-						sendInfoAll(plugin.messageEndUHCDay);
-						if (plugin.playSoundEnabled) {
-							plugin.playSoundAll(plugin.uhcEndSound);
-						}
-					}
-				}
-			}, 20L, 600L); // 1200 is the ideal number of ticks for a minute, so we'll check each half minute - waiting about a second for the first check though, to get the things started
-		}
+
+		this.uhcDayEnabled = false;
 
 		permissionsManager.load();
 		playerManager.load();
@@ -234,7 +203,7 @@ public class SemiHardcore extends JavaPlugin
 		this.timeSurvivedScoreboardEnabled = config.getBoolean("Settings.TimeSurvivedScoreboard", false);
 
 		this.sendDeathLocation = config.getBoolean("Misc.SendLocationOnDeath", true);
-		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
+		this.uhcDayEnabled = false; //config.getBoolean("Misc.UHCDayEnabled", false);
 		this.uhcDay = config.getInt("Misc.UHCDay", 2);
 		this.playSoundEnabled = config.getBoolean("Misc.PlaySounds", true);
 		this.uhcStartSound = config.getString("Misc.Sound_UHCStart", "entity.ender_dragon.growl");
